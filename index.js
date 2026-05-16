@@ -12,7 +12,7 @@ app.use(cors())
 app.use(express.json())
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT
 const uri = process.env.MONGODB_URI;
 
@@ -32,14 +32,24 @@ async function run() {
         const collectionMentora = db.collection('mentora')
 
 
+        // all courses get system;
         app.get('/mentora', async (req, res) => {
             const result = await collectionMentora.find().toArray();
             res.send(result);
         })
 
+        // courses add system;
         app.post('/mentora', async (req, res) => {
             const course = req.body;
             const result = await collectionMentora.insertOne(course);
+            console.log(result);
+            res.send(result);
+        })
+
+        //only one course find system;
+        app.get('/mentora/:id', async (req, res) => {
+            const { id } = req.params;
+            const result = await collectionMentora.findOne({_id: new ObjectId(id) });
             console.log(result);
             res.send(result);
         })
