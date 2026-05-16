@@ -31,11 +31,18 @@ async function run() {
         const db = client.db('mentora-server')
         const collectionMentora = db.collection('mentora')
 
+
         app.get('/mentora', async (req, res) => {
             const result = await collectionMentora.find().toArray();
             res.send(result);
         })
 
+        app.post('/mentora', async (req, res) => {
+            const course = req.body;
+            const result = await collectionMentora.insertOne(course);
+            console.log(result);
+            res.send(result);
+        })
 
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
